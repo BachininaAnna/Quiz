@@ -60,7 +60,8 @@
     background-position: center;
     font-size: 10px;
     line-height: 29px;
-    padding: 0 7px;
+    width: 26px;
+    text-align: center;
 }
 
 .pass-question {
