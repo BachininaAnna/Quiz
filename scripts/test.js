@@ -1,4 +1,4 @@
-(function () {
+/*(function () {*/
 const Test = {
     progressBarElement: null,
     nextButtonElement: null,
@@ -13,6 +13,7 @@ const Test = {
         checkUserData();
         const url = new URL(location.href);
         const testId = url.searchParams.get('id');
+
         if (testId) {
             const xhr = new XMLHttpRequest();
             xhr.open('GET', 'https://testologia.site/get-quiz?id=' + testId, false);
@@ -38,17 +39,17 @@ const Test = {
         this.progressBarElement = document.getElementById('progress-bar');
 
         this.nextButtonElement = document.getElementById('next');
-        this.nextButtonElement.onclick = this.move.bind(this, 'next');/* -----------вот это не поняла совсем------------- */
+        this.nextButtonElement.onclick = this.move.bind(this, 'next');
 
         this.prevButtonElement = document.getElementById('prev');
-        this.prevButtonElement.onclick = this.move.bind(this, 'prev');/* -----------вот это не поняла совсем------------- */
+        this.prevButtonElement.onclick = this.move.bind(this, 'prev');
 
         this.passButtonElement = document.getElementById('pass');
-        this.passButtonElement.onclick = this.move.bind(this, 'pass');/* -----------вот это не поняла совсем------------- */
+        this.passButtonElement.onclick = this.move.bind(this, 'pass');
 
         this.prepareProgressBar();
         this.showQuestion();
-
+        console.log(this.quiz);
         const timerElement = document.getElementById('timer');
         let seconds = 59;
         const interval = setInterval(function () {
@@ -203,7 +204,8 @@ const Test = {
             name: name,
             lastName: lastName,
             email: email,
-            results: this.userResult
+            results: this.userResult,
+            testId: id
         }));
 
         if (xhr.status === 200 && xhr.responseText) {
@@ -215,16 +217,15 @@ const Test = {
             }
 
             if (result) {
-                location.href = 'result.html?score=' + result.score + '&total=' + result.total;
+                location.href = 'result.html?score=' + result.score + '&total=' + result.total +
+                    '&id=' + id + '&name=' + name + '&lastName=' + lastName + '&email=' + email;
             }
         } else {
             location.href = 'index.html';
         }
-
-
     }
-
 }
 
 Test.init();
-})();
+/*
+})();*/

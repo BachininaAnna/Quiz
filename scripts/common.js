@@ -5,6 +5,7 @@ function checkUserData() {
     const email = url.searchParams.get('email');
 
     if (!name || !lastName || !email) {
-        location.href = 'index.html';
+        console.log('checkUserData')
+        /*location.href = 'index.html';*/
     }
 }
