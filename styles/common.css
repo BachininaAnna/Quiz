@@ -77,6 +77,21 @@ button:hover {
     border: 1px solid #e2dfe7;
 }
 
+.common-link a {
+    display: flex;
+    align-items: center;
+    font-size: 17px;
+    line-height: 20px;
+    text-decoration: none;
+}
+.common-link a:hover {
+    text-decoration: underline;
+}
+
+.common-link a img {
+    margin-left: 13px;
+}
+
 .footer {
     text-align: center;
     padding: 40px 0;

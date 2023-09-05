@@ -70,22 +70,6 @@
     margin-top: 10px;
 }
 
-.pass-question a {
-    display: flex;
-    align-items: center;
-    font-size: 17px;
-    line-height: 20px;
-    text-decoration: none;
-}
-
-.pass-question a:hover {
-    text-decoration: underline;
-}
-
-.pass-question a img {
-    margin-left: 13px;
-}
-
 input[type="radio"] {
     appearance: none;
     -webkit-appearance: none;
