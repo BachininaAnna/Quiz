@@ -197,18 +197,11 @@ const Test = {
             } else if (currentItemIndex < this.currentQuestionIndex) {
                 item.classList.add('complete');
             }
-
         });
 
         this.showQuestion();
     },
     complete() {
-        /*const url = new URL(location.href);
-        const id = url.searchParams.get('id');
-        const name = url.searchParams.get('name');
-        const lastName = url.searchParams.get('lastName');
-        const email = url.searchParams.get('email');*/
-
         const xhr = new XMLHttpRequest();
         xhr.open('POST', 'https://testologia.site/pass-quiz?id=' + this.id, false);
         xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
@@ -219,10 +212,6 @@ const Test = {
             results: this.userResult,
         }));
         sessionStorage.setItem('userResult', JSON.stringify(this.userResult));
-       /* sessionStorage.setItem('id', id);
-        sessionStorage.setItem('name', name);
-        sessionStorage.setItem('lastName', lastName);
-        sessionStorage.setItem('email', email);*/
 
         if (xhr.status === 200 && xhr.responseText) {
             let result = null;
