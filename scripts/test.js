@@ -49,7 +49,6 @@ const Test = {
 
         this.prepareProgressBar();
         this.showQuestion();
-        console.log(this.quiz);
         const timerElement = document.getElementById('timer');
         let seconds = 59;
         const interval = setInterval(function () {
@@ -163,7 +162,6 @@ const Test = {
             })
         }
 
-
         if (action === 'pass' || action === 'next') {
             this.currentQuestionIndex++;
         } else {
@@ -200,13 +198,17 @@ const Test = {
         const xhr = new XMLHttpRequest();
         xhr.open('POST', 'https://testologia.site/pass-quiz?id=' + id, false);
         xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-        xhr.send(JSON.stringify( {
+        xhr.send(JSON.stringify({
             name: name,
             lastName: lastName,
             email: email,
             results: this.userResult,
-            testId: id
         }));
+        sessionStorage.setItem('userResult', JSON.stringify(this.userResult));
+        sessionStorage.setItem('id', id);
+        sessionStorage.setItem('name', name);
+        sessionStorage.setItem('lastName', lastName);
+        sessionStorage.setItem('email', email);
 
         if (xhr.status === 200 && xhr.responseText) {
             let result = null;
@@ -215,10 +217,10 @@ const Test = {
             } catch (e) {
                 location.href = 'index.html';
             }
-
             if (result) {
-                location.href = 'result.html?score=' + result.score + '&total=' + result.total +
-                    '&id=' + id + '&name=' + name + '&lastName=' + lastName + '&email=' + email;
+                sessionStorage.setItem('score', result.score);
+                sessionStorage.setItem('total', result.total);
+                location.href = 'result.html';
             }
         } else {
             location.href = 'index.html';
