@@ -31,7 +31,6 @@ const Form = {
         this.fields.forEach(item => {
             item.element = document.getElementById(item.id);
             item.element.onchange = function () {
-                console.log(1);
                 that.validateField.call(that, item, this);
             }
         });
@@ -70,13 +69,13 @@ const Form = {
     },
     processForm() {
         if (this.validateForm()) {
-
-            let paramString = '';
-            this.fields.forEach(item => {
-                paramString += (!paramString ? '?' : '&') + item.name + '=' + item.element.value;
-            })
-
-            location.href = 'choice.html' + paramString;
+            const name = document.getElementById('name').value;
+            const lastName = document.getElementById('last-name').value;
+            const email = document.getElementById('email').value;
+            sessionStorage.setItem('name', name);
+            sessionStorage.setItem('lastName', lastName);
+            sessionStorage.setItem('email', email);
+            location.href = 'choice.html';
         }
     }
 };

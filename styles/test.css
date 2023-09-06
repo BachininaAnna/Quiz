@@ -70,11 +70,19 @@
     margin-top: 10px;
 }
 
+.disabled {
+    pointer-events: none;
+    color: #e2dfe7;
+    transition: 0.2s;
+}
+
+
 input[type="radio"] {
     appearance: none;
     -webkit-appearance: none;
     width: 20px;
     height: 20px;
+    flex-shrink: 0;
     border: 3px solid #6933DCFF;
     border-radius: 50%;
     margin: 2px 13px 0 0;
