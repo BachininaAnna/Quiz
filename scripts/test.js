@@ -9,14 +9,20 @@ const Test = {
     quiz: null,
     currentQuestionIndex: 1,
     userResult: [],
+    id: null,
+    name: null,
+    lastName: null,
+    email: null,
     init() {
         checkUserData();
-        const url = new URL(location.href);
-        const testId = url.searchParams.get('id');
+        this.id = sessionStorage.getItem('id');
+        this.name = sessionStorage.getItem('name');
+        this.lastName = sessionStorage.getItem('lastName');
+        this.email = sessionStorage.getItem('email');
 
-        if (testId) {
+        if (this.id) {
             const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'https://testologia.site/get-quiz?id=' + testId, false);
+            xhr.open('GET', 'https://testologia.site/get-quiz?id=' + this.id, false);
             xhr.send();
             if (xhr.status === 200 && xhr.responseText) {
                 try {
@@ -50,7 +56,7 @@ const Test = {
         this.prepareProgressBar();
         this.showQuestion();
         const timerElement = document.getElementById('timer');
-        let seconds = 59;
+        let seconds = 599;
         const interval = setInterval(function () {
             seconds--;
             timerElement.innerText = seconds;
@@ -101,6 +107,8 @@ const Test = {
             inputElement.setAttribute('value', answer.id);
             if (chosenOption && chosenOption.chosenAnswerId === answer.id) {
                 inputElement.setAttribute('checked', 'checked');
+            } else {
+
             }
 
             inputElement.onchange = function () {
@@ -120,8 +128,12 @@ const Test = {
 
         if (chosenOption && chosenOption.chosenAnswerId) { /*проверяем есть ли отвеченный вопрос, если уже есть. то кнопку не дизэйблим*/
             this.nextButtonElement.removeAttribute('disabled');
+            this.passButtonElement.classList.add('disabled');
+            document.getElementById('img-arrow').setAttribute('src', 'images/grey-mini-arrow.svg');
         } else {
             this.nextButtonElement.setAttribute('disabled', 'disabled');
+            document.getElementById('pass').classList.remove('disabled');
+            document.getElementById('img-arrow').setAttribute('src', 'images/blue-mini-arrow.svg');
         }
 
 
@@ -138,10 +150,12 @@ const Test = {
     },
     chooseAnswer() {
         this.nextButtonElement.removeAttribute('disabled');
+        this.passButtonElement.classList.add('disabled');
+        document.getElementById('img-arrow').setAttribute('src', 'images/grey-mini-arrow.svg');
     },
     move(action) {
         const activeQuestion = this.quiz.questions[this.currentQuestionIndex - 1];
-        const chosenAnswer = Array.from(document.getElementsByClassName('option-answer')).find(element => {/*Array.from() превращаем коллекцию в массив*/
+        const chosenAnswer = Array.from(document.getElementsByClassName('option-answer')).find(element => {
             return element.checked;
         });
 
@@ -189,26 +203,26 @@ const Test = {
         this.showQuestion();
     },
     complete() {
-        const url = new URL(location.href);
+        /*const url = new URL(location.href);
         const id = url.searchParams.get('id');
         const name = url.searchParams.get('name');
         const lastName = url.searchParams.get('lastName');
-        const email = url.searchParams.get('email');
+        const email = url.searchParams.get('email');*/
 
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://testologia.site/pass-quiz?id=' + id, false);
+        xhr.open('POST', 'https://testologia.site/pass-quiz?id=' + this.id, false);
         xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
         xhr.send(JSON.stringify({
-            name: name,
-            lastName: lastName,
-            email: email,
+            name: this.name,
+            lastName: this.lastName,
+            email: this.email,
             results: this.userResult,
         }));
         sessionStorage.setItem('userResult', JSON.stringify(this.userResult));
-        sessionStorage.setItem('id', id);
+       /* sessionStorage.setItem('id', id);
         sessionStorage.setItem('name', name);
         sessionStorage.setItem('lastName', lastName);
-        sessionStorage.setItem('email', email);
+        sessionStorage.setItem('email', email);*/
 
         if (xhr.status === 200 && xhr.responseText) {
             let result = null;
