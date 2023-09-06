@@ -47,6 +47,10 @@
     margin-bottom: 40px;
 }
 
+.correct-answer-title p {
+    display: inline;
+}
+
 .correct-answer-option {
     display: flex;
     align-items: center;
@@ -62,11 +66,19 @@
     margin-right: 13px;
 }
 
-.right-answer {
+.correct-circle {
     border: 6px solid #5FDC33;
 }
 
-.wrong-answer {
+.correct-text {
+    color: #5FDC33;
+}
+
+.wrong-text {
+    color: #DC3333;
+}
+
+.wrong-circle {
     border: 6px solid #DC3333;
 }
 

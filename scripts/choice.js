@@ -52,13 +52,11 @@ const Choice = {
     },
     chooseQuiz(element) {
         const dataId = element.getAttribute('data-id');
-        console.log(dataId);
         if (dataId) {
             location.href = 'test.html' + location.search + '&id=' + dataId;
         }
     }
 }
-
 
 Choice.init();
 
