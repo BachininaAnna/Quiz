@@ -60,6 +60,7 @@
 .correct-answer-option-circle {
     width: 20px;
     height: 20px;
+    flex-shrink: 0;
     border: 3px solid #6933DC;
     border-radius: 50%;
     box-sizing: border-box;

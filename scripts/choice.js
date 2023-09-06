@@ -51,9 +51,10 @@ const Choice = {
         }
     },
     chooseQuiz(element) {
-        const dataId = element.getAttribute('data-id');
-        if (dataId) {
-            location.href = 'test.html' + location.search + '&id=' + dataId;
+        const id = element.getAttribute('data-id');
+        if (id) {
+            sessionStorage.setItem('id', id);
+            location.href = 'test.html';
         }
     }
 }
