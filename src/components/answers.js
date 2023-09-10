@@ -1,16 +1,16 @@
-/*(function () {*/
-const Answers = {
-    quiz: null,
-    correctAnswers: null,
-    id: null,
-    name: null,
-    lastName: null,
-    email: null,
-    personInfo: null,
-    answersFromServer: [],
-    userResults: [],
+export class Answers {
 
-    init() {
+    constructor() {
+        this.quiz = null;
+        this.correctAnswers = null;
+        this.id = null;
+        this.name = null;
+        this.lastName = null;
+        this.email = null;
+        this.personInfo = null;
+        this.answersFromServer = [];
+        this.userResults = [];
+
         const url = new URL(location.href);
         this.id = sessionStorage.getItem('id');
         this.name = sessionStorage.getItem('name');
@@ -34,7 +34,7 @@ const Answers = {
         } else {
             location.href = 'index.html';
         }
-    },
+    }
     getResult() {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', 'https://testologia.site/get-quiz-right?id=' + this.id, false);
@@ -45,7 +45,7 @@ const Answers = {
             this.userResults = JSON.parse(sessionStorage.getItem('userResult'))
             this.showRightWrongAnswers();
         }
-    },
+    }
 
     showRightWrongAnswers() {
         document.getElementById('answers-pre-title-span').innerText = this.quiz.name;
@@ -116,9 +116,5 @@ const Answers = {
             })
             this.correctAnswers.appendChild(correctAnswer);
         }
-    },
+    }
 }
-
-Answers.init();
-/*
-})();*/

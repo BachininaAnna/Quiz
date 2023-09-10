@@ -1,7 +1,6 @@
-/*(function () {*/
-const Choice = {
-    quizzes: [],
-    init() {
+export class Choice {
+    constructor() {
+        this.quizzes = [];
         checkUserData();
 
         const xhr = new XMLHttpRequest();
@@ -18,7 +17,8 @@ const Choice = {
         } else {
             location.href = 'index.html';
         }
-    },
+    }
+
     processQuizzes() {
         const choiceOptionsElement = document.getElementById('choice-options');
         if (this.quizzes && this.quizzes.length > 0) {
@@ -49,7 +49,8 @@ const Choice = {
                 choiceOptionsElement.appendChild(choiceOptionElement);
             })
         }
-    },
+    }
+
     chooseQuiz(element) {
         const id = element.getAttribute('data-id');
         if (id) {
@@ -59,7 +60,3 @@ const Choice = {
     }
 }
 
-Choice.init();
-
-/*
-})();*/

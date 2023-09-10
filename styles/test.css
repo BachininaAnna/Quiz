@@ -55,7 +55,7 @@
 }
 
 .test-time-clock {
-    background-image: url("../images/clock.svg");
+    background-image: url("../static/images/clock.svg");
     background-size: cover;
     background-position: center;
     font-size: 10px;

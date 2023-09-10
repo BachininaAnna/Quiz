@@ -1,19 +1,20 @@
-/*(function () {*/
-const Test = {
-    progressBarElement: null,
-    nextButtonElement: null,
-    prevButtonElement: null,
-    passButtonElement: null,
-    questionTitleElement: null,
-    optionsElement: null,
-    quiz: null,
-    currentQuestionIndex: 1,
-    userResult: [],
-    id: null,
-    name: null,
-    lastName: null,
-    email: null,
-    init() {
+export class Test {
+
+    constructor() {
+        this.progressBarElement = null;
+        this.nextButtonElement = null;
+        this.prevButtonElement = null;
+        this.passButtonElement = null;
+        this.questionTitleElement = null;
+        this.optionsElement = null;
+        this.quiz = null;
+        this.currentQuestionIndex = 1;
+        this.userResult = [];
+        this.id = null;
+        this.name = null;
+        this.lastName = null;
+        this.email = null;
+
         checkUserData();
         this.id = sessionStorage.getItem('id');
         this.name = sessionStorage.getItem('name');
@@ -37,7 +38,8 @@ const Test = {
         } else {
             location.href = 'index.html';
         }
-    },
+    }
+
     startQuiz() {
         document.getElementById('pre-title').innerText = this.quiz.name;
         this.questionTitleElement = document.getElementById('title');
@@ -66,7 +68,8 @@ const Test = {
                 this.complete();
             }
         }.bind(this), 1000);
-    },
+    }
+
     prepareProgressBar() {
         for (let i = 0; i < this.quiz.questions.length; i++) {
             const itemElement = document.createElement('div');
@@ -84,7 +87,8 @@ const Test = {
 
             this.progressBarElement.appendChild(itemElement);
         }
-    },
+    }
+
     showQuestion() {
         const activeQuestion = this.quiz.questions[this.currentQuestionIndex - 1];
         this.questionTitleElement.innerHTML = '<span>Вопрос  ' + this.currentQuestionIndex
@@ -147,12 +151,14 @@ const Test = {
         } else {
             this.prevButtonElement.setAttribute('disabled', 'disabled');
         }
-    },
+    }
+
     chooseAnswer() {
         this.nextButtonElement.removeAttribute('disabled');
         this.passButtonElement.classList.add('disabled');
         document.getElementById('img-arrow').setAttribute('src', 'images/grey-mini-arrow.svg');
-    },
+    }
+
     move(action) {
         const activeQuestion = this.quiz.questions[this.currentQuestionIndex - 1];
         const chosenAnswer = Array.from(document.getElementsByClassName('option-answer')).find(element => {
@@ -200,7 +206,8 @@ const Test = {
         });
 
         this.showQuestion();
-    },
+    }
+
     complete() {
         const xhr = new XMLHttpRequest();
         xhr.open('POST', 'https://testologia.site/pass-quiz?id=' + this.id, false);
@@ -231,6 +238,3 @@ const Test = {
     }
 }
 
-Test.init();
-/*
-})();*/

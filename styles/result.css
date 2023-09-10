@@ -20,7 +20,7 @@
     margin-bottom: 60px;
 }
 .result-score {
-    background-image: url("../images/result-image.svg");
+    background-image: url("../static/images/result-image.svg");
     background-size: cover;
     background-position: center;
     width: 480px;
