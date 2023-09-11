@@ -1,7 +1,10 @@
+import {UrlManager} from "../utilis/url-manager.js";
+
 export class Choice {
+
     constructor() {
         this.quizzes = [];
-        checkUserData();
+        new UrlManager();
 
         const xhr = new XMLHttpRequest();
         xhr.open('GET', 'https://testologia.site/get-quizzes', false);
@@ -39,7 +42,7 @@ export class Choice {
                 choiceOptionArrowElement.className = 'choice-option-arrow';
 
                 const choiceOptionImageElement = document.createElement('img');
-                choiceOptionImageElement.setAttribute('src', 'images/arrow.png');
+                choiceOptionImageElement.setAttribute('src', '/images/arrow.png');
                 choiceOptionImageElement.setAttribute('alt', 'Стрелка');
 
                 choiceOptionArrowElement.appendChild(choiceOptionImageElement);

@@ -1,3 +1,5 @@
+import {UrlManager} from "../utilis/url-manager.js";
+
 export class Test {
 
     constructor() {
@@ -15,7 +17,7 @@ export class Test {
         this.lastName = null;
         this.email = null;
 
-        checkUserData();
+        new UrlManager();
         this.id = sessionStorage.getItem('id');
         this.name = sessionStorage.getItem('name');
         this.lastName = sessionStorage.getItem('lastName');
@@ -29,14 +31,14 @@ export class Test {
                 try {
                     this.quiz = JSON.parse(xhr.responseText);
                 } catch (e) {
-                    location.href = '#/index';
+                    location.href = '#/';
                 }
                 this.startQuiz();
             } else {
-                location.href = '#/index';
+                location.href = '#/';
             }
         } else {
-            location.href = '#/index';
+            location.href = '#/';
         }
     }
 
@@ -133,11 +135,11 @@ export class Test {
         if (chosenOption && chosenOption.chosenAnswerId) { /*проверяем есть ли отвеченный вопрос, если уже есть. то кнопку не дизэйблим*/
             this.nextButtonElement.removeAttribute('disabled');
             this.passButtonElement.classList.add('disabled');
-            document.getElementById('img-arrow').setAttribute('src', 'images/grey-mini-arrow.svg');
+            document.getElementById('img-arrow').setAttribute('src', '/images/grey-mini-arrow.svg');
         } else {
             this.nextButtonElement.setAttribute('disabled', 'disabled');
             document.getElementById('pass').classList.remove('disabled');
-            document.getElementById('img-arrow').setAttribute('src', 'images/blue-mini-arrow.svg');
+            document.getElementById('img-arrow').setAttribute('src', '/images/blue-mini-arrow.svg');
         }
 
 
@@ -156,7 +158,7 @@ export class Test {
     chooseAnswer() {
         this.nextButtonElement.removeAttribute('disabled');
         this.passButtonElement.classList.add('disabled');
-        document.getElementById('img-arrow').setAttribute('src', 'images/grey-mini-arrow.svg');
+        document.getElementById('img-arrow').setAttribute('src', '/images/grey-mini-arrow.svg');
     }
 
     move(action) {
@@ -225,7 +227,7 @@ export class Test {
             try {
                 result = JSON.parse(xhr.responseText);
             } catch (e) {
-                location.href = '#/index';
+                location.href = '#/';
             }
             if (result) {
                 sessionStorage.setItem('score', result.score);
@@ -233,7 +235,7 @@ export class Test {
                 location.href = '#/result';
             }
         } else {
-            location.href = '#/index';
+            location.href = '#/';
         }
     }
 }
