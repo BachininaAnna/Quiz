@@ -55,7 +55,7 @@ export class Choice {
         const id = element.getAttribute('data-id');
         if (id) {
             sessionStorage.setItem('id', id);
-            location.href = 'test.html';
+            location.href = '#/test';
         }
     }
 }

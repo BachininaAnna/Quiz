@@ -76,7 +76,7 @@ export class Form {
             sessionStorage.setItem('name', name);
             sessionStorage.setItem('lastName', lastName);
             sessionStorage.setItem('email', email);
-            location.href = 'choice.html';
+            location.href = '#/choice';
         }
     }
 }

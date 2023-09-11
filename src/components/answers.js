@@ -25,14 +25,14 @@ export class Answers {
                 try {
                     this.quiz = JSON.parse(xhr.responseText);
                 } catch (e) {
-                    location.href = 'index.html';
+                    location.href = '#/index';
                 }
                 this.getResult();
             } else {
-                location.href = 'index.html';
+                location.href = '#/index';
             }
         } else {
-            location.href = 'index.html';
+            location.href = '#/index';
         }
     }
     getResult() {

@@ -29,14 +29,14 @@ export class Test {
                 try {
                     this.quiz = JSON.parse(xhr.responseText);
                 } catch (e) {
-                    location.href = 'index.html';
+                    location.href = '#/index';
                 }
                 this.startQuiz();
             } else {
-                location.href = 'index.html';
+                location.href = '#/index';
             }
         } else {
-            location.href = 'index.html';
+            location.href = '#/index';
         }
     }
 
@@ -225,15 +225,15 @@ export class Test {
             try {
                 result = JSON.parse(xhr.responseText);
             } catch (e) {
-                location.href = 'index.html';
+                location.href = '#/index';
             }
             if (result) {
                 sessionStorage.setItem('score', result.score);
                 sessionStorage.setItem('total', result.total);
-                location.href = 'result.html';
+                location.href = '#/result';
             }
         } else {
-            location.href = 'index.html';
+            location.href = '#/index';
         }
     }
 }

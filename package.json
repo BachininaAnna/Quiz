@@ -1,0 +1,23 @@
+{
+  "name": "quiz",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BachininaAnna/Quiz.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BachininaAnna/Quiz/issues"
+  },
+  "homepage": "https://github.com/BachininaAnna/Quiz#readme",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
