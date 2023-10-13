@@ -28,7 +28,7 @@ module.exports = {
             ],
         }),
     ],
-    module: {
+    /*module: {
         rules: [
             {
                 test: /\.(?:js|mjs|cjs)$/,
@@ -43,5 +43,5 @@ module.exports = {
                 }
             }
         ]
-    },
+    },*/
 };

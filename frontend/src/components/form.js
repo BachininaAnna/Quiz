@@ -1,3 +1,5 @@
+
+
 export class Form {
 
     constructor(page) {
@@ -85,15 +87,45 @@ export class Form {
         return isValid
     }
 
-    processForm() {
+    async processForm() {
         if (this.validateForm()) {
-            const name = document.getElementById('name').value;
-            const lastName = document.getElementById('last-name').value;
-            const email = document.getElementById('email').value;
-            sessionStorage.setItem('name', name);
-            sessionStorage.setItem('lastName', lastName);
-            sessionStorage.setItem('email', email);
-            location.href = '#/choice';
+
+            if (this.page === 'signup') {
+
+                try {
+                    const response = await fetch('http://localhost:3000/api/signup', {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name: this.fields.find(item => item.name === 'name').element.value,
+                            lastName: this.fields.find(item => item.name === 'lastName').element.value,
+                            email: this.fields.find(item => item.name === 'email').element.value,
+                            password: this.fields.find(item => item.name === 'password').element.value,
+                        })
+                    });
+                    if (response.status < 200 || response.status >= 300) {
+                        throw new Error(response.message);
+                    }
+
+                    const result = await response.json();
+                    if (result) {
+                        if (result.error || !result.user) {
+                            throw new Error(result.message);
+                        }
+
+                        location.href = '#/choice';
+                    }
+
+                } catch (error) {
+                   console.log(error);
+                }
+
+            } else {
+
+            }
         }
     }
 }
