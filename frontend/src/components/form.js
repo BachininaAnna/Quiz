@@ -1,4 +1,6 @@
-
+import {CustomHttp} from "../services/custom-http.js";
+import {Auth} from "../services/auth.js";
+import config from "../../config/config.js";
 
 export class Form {
 
@@ -91,31 +93,17 @@ export class Form {
         if (this.validateForm()) {
 
             if (this.page === 'signup') {
-
                 try {
-                    const response = await fetch('http://localhost:3000/api/signup', {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            name: this.fields.find(item => item.name === 'name').element.value,
-                            lastName: this.fields.find(item => item.name === 'lastName').element.value,
-                            email: this.fields.find(item => item.name === 'email').element.value,
-                            password: this.fields.find(item => item.name === 'password').element.value,
-                        })
-                    });
-                    if (response.status < 200 || response.status >= 300) {
-                        throw new Error(response.message);
-                    }
-
-                    const result = await response.json();
+                    const result = await CustomHttp.request(config.host + '/signup','POST', {
+                        name: this.fields.find(item => item.name === 'name').element.value,
+                        lastName: this.fields.find(item => item.name === 'lastName').element.value,
+                        email: this.fields.find(item => item.name === 'email').element.value,
+                        password: this.fields.find(item => item.name === 'password').element.value,
+                    })
                     if (result) {
                         if (result.error || !result.user) {
                             throw new Error(result.message);
                         }
-
                         location.href = '#/choice';
                     }
 
@@ -124,7 +112,23 @@ export class Form {
                 }
 
             } else {
+                try {
+                    const result = await CustomHttp.request(config.host + '/login','POST', {
+                        email: this.fields.find(item => item.name === 'email').element.value,
+                        password: this.fields.find(item => item.name === 'password').element.value,
+                    })
+                    if (result) {
+                        if (result.error || !result.accessToken || !result.refreshToken
+                            || !result.fullName || !result.userId) {
+                            throw new Error(result.message);
+                        }
+                        Auth.setTokens(result.accessToken, result.refreshToken);
+                        location.href = '#/choice';
+                    }
 
+                } catch (error) {
+                    console.log(error);
+                }
             }
         }
     }
