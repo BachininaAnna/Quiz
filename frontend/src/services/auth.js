@@ -16,11 +16,11 @@ export class Auth {
                 body: JSON.stringify({refreshToken: refreshToken})
             });
 
-            if (response && response.status === 200){
+            if (response && response.status === 200) {
                 const result = await response.json();
-                if (result && !result.error){
-                   this.setTokens(result.accessToken, result.refreshToken);
-                   return true;
+                if (result && !result.error) {
+                    this.setTokens(result.accessToken, result.refreshToken);
+                    return true;
                 }
             }
         }
@@ -34,8 +34,22 @@ export class Auth {
         localStorage.setItem(this.accessTokenKey, accessToken);
         localStorage.setItem(this.refreshTokenKey, refreshToken);
     }
+
     static removeTokens() {
         localStorage.removeItem(this.accessTokenKey);
         localStorage.removeItem(this.refreshTokenKey);
+    }
+
+    static setUserInfo(info) {
+        localStorage.setItem('userinfo', JSON.stringify(info));
+    }
+
+    static getUserInfo() {
+        const userInfo = localStorage.getItem('userinfo');
+        if (userInfo) {
+            return JSON.parse(userInfo);
+        }
+
+        return null;
     }
 }

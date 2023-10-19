@@ -28,6 +28,12 @@ a {
     margin: 0 auto;
 }
 
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .common-title {
     font-family: "Museo Sans Cyrl Bold", sans-serif;
     font-size: 48px;
@@ -36,6 +42,25 @@ a {
 
 .common-title span {
     color: #6933DCFF;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+}
+
+.profile-image {
+    margin-right: 5px;
+}
+
+.profile-user {
+    font-size: 18px;
+    line-height: 18px;
+}
+
+.profile-logout {
+    font-size: 12px;
+    line-height: 12px;
 }
 
 .button {
@@ -50,9 +75,11 @@ a {
     transition: .4s;
     text-decoration: none;
 }
+
 a.button {
     display: inline-block;
 }
+
 .button-transparent {
     background: transparent;
     color: #6933DC;
@@ -67,10 +94,12 @@ a.button {
 button:hover {
     background-color: #4F26A8FF;
 }
+
 .button:disabled {
     background-color: #e2dfe7;
     cursor: not-allowed;
 }
+
 .button-transparent:disabled {
     background: transparent;
     color: #e2dfe7;
@@ -84,6 +113,7 @@ button:hover {
     line-height: 20px;
     text-decoration: none;
 }
+
 .common-link a:hover {
     text-decoration: underline;
 }
