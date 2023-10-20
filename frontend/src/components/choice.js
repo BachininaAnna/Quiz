@@ -1,15 +1,17 @@
 import {UrlManager} from "../utilis/url-manager.js";
 import {CustomHttp} from "../services/custom-http.js";
 import config from "../../config/config.js";
+import {Auth} from "../services/auth";
 
 export class Choice {
 
     constructor() {
         this.quizzes = [];
-        /*new UrlManager();*/
-       /* this.routeParams = UrlManager.getQueryParams();
-        UrlManager.checkUserData(this.routeParams);*/
+        this.testResult = null;
 
+        /*new UrlManager();*/
+        /* this.routeParams = UrlManager.getQueryParams();
+         UrlManager.checkUserData(this.routeParams);*/
         this.init();
     }
 
@@ -21,12 +23,30 @@ export class Choice {
                     throw new Error(result.error);
                 }
                 this.quizzes = result;
-                this.processQuizzes();
             }
         } catch (error) {
-            console.log(error);
+            return console.log(error);
         }
+
+        const userInfo = Auth.getUserInfo();
+        if (userInfo) {
+            try {
+                const result = await CustomHttp.request(config.host + '/tests/results?userId=' + userInfo.userId);
+                if (result) {
+                    if (result.error) {
+                        throw new Error(result.error);
+                    }
+                    this.testResult = result;
+
+                }
+            } catch (error) {
+                return console.log(error);
+            }
+        }
+
+        this.processQuizzes();
     }
+
     processQuizzes() {
         const choiceOptionsElement = document.getElementById('choice-options');
         if (this.quizzes && this.quizzes.length > 0) {
@@ -45,6 +65,15 @@ export class Choice {
 
                 const choiceOptionArrowElement = document.createElement('div');
                 choiceOptionArrowElement.className = 'choice-option-arrow';
+
+                const result = this.testResult.find(item => item.testId === quiz.id);
+                if (result) {
+                    const choiceOptionResultElement = document.createElement('div');
+                    choiceOptionResultElement.className = 'choice-option-result';
+                    choiceOptionResultElement.innerHTML = ' <div>Результат </div>' +
+                        '<div>' + result.score + '/' + result.total + ' </div>';
+                    choiceOptionElement.appendChild(choiceOptionResultElement);
+                }
 
                 const choiceOptionImageElement = document.createElement('img');
                 choiceOptionImageElement.setAttribute('src', '/images/arrow.png');
