@@ -82,8 +82,15 @@ export class Router {
     }
 
     async openRoute() {
+        const urlRoute = window.location.hash;
+        if (urlRoute === '#/logout'){
+            await Auth.logOut();
+            window.location.hash = '#/';
+            return
+        }
+
         const newRoute = this.routes.find(item => {
-            return item.route === window.location.hash
+            return item.route === urlRoute;
         })
 
         if (!newRoute) {

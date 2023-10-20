@@ -1,4 +1,7 @@
 import {UrlManager} from "../utilis/url-manager.js";
+import {CustomHttp} from "../services/custom-http.js";
+import config from "../../config/config.js";
+import {Auth} from "../services/auth.js";
 
 export class Test {
 
@@ -12,39 +15,41 @@ export class Test {
         this.quiz = null;
         this.currentQuestionIndex = 1;
         this.userResult = [];
-        this.id = null;
+        this.testId = null;
         this.name = null;
         this.lastName = null;
         this.email = null;
 
         new UrlManager();
-        this.id = sessionStorage.getItem('id');
+        this.testId = sessionStorage.getItem('id');
         this.name = sessionStorage.getItem('name');
         this.lastName = sessionStorage.getItem('lastName');
         this.email = sessionStorage.getItem('email');
 
-        if (this.id) {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'https://testologia.site/get-quiz?id=' + this.id, false);
-            xhr.send();
-            if (xhr.status === 200 && xhr.responseText) {
-                try {
-                    this.quiz = JSON.parse(xhr.responseText);
-                } catch (e) {
-                    location.href = '#/';
+        this.init();
+
+    }
+
+    async init() {
+        if (this.testId) {
+            try {
+                const result = await CustomHttp.request(config.host + '/tests/' + this.testId);
+                if (result) {
+                    if (result.error) {
+                        throw new Error(result.error);
+                    }
+                    this.quiz = result;
+                    this.startQuiz();
                 }
-                this.startQuiz();
-            } else {
-                location.href = '#/';
+            } catch (error) {
+                console.log(error);
             }
-        } else {
-            location.href = '#/';
         }
     }
 
     startQuiz() {
         document.getElementById('pre-title').innerText = this.quiz.name;
-        this.questionTitleElement = document.getElementById('title');
+        this.questionTitleElement = document.getElementById('test-question-title');
         this.optionsElement = document.getElementById('options');
         this.progressBarElement = document.getElementById('progress-bar');
 
@@ -92,7 +97,7 @@ export class Test {
     }
 
     showQuestion() {
-        const activeQuestion = this.quiz.questions[this.currentQuestionIndex - 1];
+        const activeQuestion = this.quiz.questions[this.currentQuestionIndex - 1];/////////////////////////////////
         this.questionTitleElement.innerHTML = '<span>Вопрос  ' + this.currentQuestionIndex
             + ':</span> ' + activeQuestion.question;
 
@@ -210,32 +215,30 @@ export class Test {
         this.showQuestion();
     }
 
-    complete() {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://testologia.site/pass-quiz?id=' + this.id, false);
-        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-        xhr.send(JSON.stringify({
-            name: this.name,
-            lastName: this.lastName,
-            email: this.email,
-            results: this.userResult,
-        }));
-        sessionStorage.setItem('userResult', JSON.stringify(this.userResult));
-
-        if (xhr.status === 200 && xhr.responseText) {
-            let result = null;
-            try {
-                result = JSON.parse(xhr.responseText);
-            } catch (e) {
-                location.href = '#/';
-            }
-            if (result) {
-                sessionStorage.setItem('score', result.score);
-                sessionStorage.setItem('total', result.total);
-                location.href = '#/result';
-            }
-        } else {
+    async complete() {
+        const userInfo = Auth.getUserInfo();
+        if (!userInfo) {
             location.href = '#/';
+        }
+
+        try {
+            const result = await CustomHttp.request(config.host + '/tests/' + this.testId + '/pass', 'POST',
+                {
+                    userId: userInfo.userId,
+                    results: this.userResult
+                });
+
+            if (result) {
+                if (result.error) {
+                    throw new Error(result.error);
+                }
+                 location.href = '#/result';
+                 sessionStorage.setItem('score', result.score);
+                 sessionStorage.setItem('total', result.total);
+            }
+            sessionStorage.setItem('userResult', JSON.stringify(this.userResult));
+        } catch (error) {
+            console.log(error);
         }
     }
 }
