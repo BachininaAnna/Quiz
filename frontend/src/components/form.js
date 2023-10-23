@@ -10,7 +10,7 @@ export class Form {
         this.page = page;
 
         const accessToken = localStorage.getItem(Auth.accessTokenKey);
-        if(accessToken){
+        if (accessToken) {
             location.href = '#/choice';
             return;
         }
@@ -98,6 +98,9 @@ export class Form {
     async processForm() {
         if (this.validateForm()) {
             const email = this.fields.find(item => item.name === 'email').element.value;
+            if (email) {
+                localStorage.setItem('email', email);
+            }
             const password = this.fields.find(item => item.name === 'password').element.value;
 
             if (this.page === 'signup') {

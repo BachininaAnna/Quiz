@@ -15,7 +15,8 @@ export class Answers {
         this.id = sessionStorage.getItem('id');
         this.name = sessionStorage.getItem('name');
         this.lastName = sessionStorage.getItem('lastName');
-        this.email = sessionStorage.getItem('email');
+        this.fullName = JSON.parse(localStorage.getItem('userInfo')).fullName;
+        this.email = localStorage.getItem('email');
 
         if (this.id) {
             const xhr = new XMLHttpRequest();
@@ -54,7 +55,7 @@ export class Answers {
 
         this.personInfo = document.getElementById('answers-person-info-span');
         this.personInfo.innerHTML = '';
-        this.personInfo.innerText = `${this.name} ${this.lastName}, ${this.email}`;
+        this.personInfo.innerText = `${this.fullName}, ${this.email}`;
 
         const completedQuestions = this.quiz.questions;
 
