@@ -1,4 +1,3 @@
-import {UrlManager} from "../utilis/url-manager.js";/*???*/
 import {CustomHttp} from "../services/custom-http.js";
 import config from "../../config/config.js";
 import {Auth} from "../services/auth.js";
@@ -11,16 +10,13 @@ export class Test {
         this.passButtonElement = null;
         this.questionTitleElement = null;
         this.optionsElement = null;
-        this.quiz = null;
+        this.test = null;
         this.currentQuestionIndex = 1;
-        this.userResult = [];/**/
-        this.testId = null;
+        this.userResult = [];
+
         this.testId = sessionStorage.getItem('testId');
-
         this.init();
-
     }
-
     async init() {
         if (this.testId) {
             try {
@@ -29,18 +25,16 @@ export class Test {
                     if (result.error) {
                         throw new Error(result.error);
                     }
-                    this.quiz = result;
+                    this.test = result;
                     this.startQuiz();
-                    console.log(result);
                 }
             } catch (error) {
                 console.log(error);
             }
         }
     }
-
     startQuiz() {
-        document.getElementById('pre-title').innerText = this.quiz.name;
+        document.getElementById('pre-title').innerText = this.test.name;
         this.questionTitleElement = document.getElementById('test-question-title');
         this.optionsElement = document.getElementById('options');
         this.progressBarElement = document.getElementById('progress-bar');
@@ -68,9 +62,8 @@ export class Test {
             }
         }.bind(this), 1000);
     }
-
     prepareProgressBar() {
-        for (let i = 0; i < this.quiz.questions.length; i++) {
+        for (let i = 0; i < this.test.questions.length; i++) {
             const itemElement = document.createElement('div');
             itemElement.className = 'test-progress-bar-item' + (i === 0 ? ' active' : '');
 
@@ -89,7 +82,7 @@ export class Test {
     }
 
     showQuestion() {
-        const activeQuestion = this.quiz.questions[this.currentQuestionIndex - 1];/////////////////////////////////
+        const activeQuestion = this.test.questions[this.currentQuestionIndex - 1];
         this.questionTitleElement.innerHTML = '<span>Вопрос  ' + this.currentQuestionIndex
             + ':</span> ' + activeQuestion.question;
 
@@ -129,7 +122,7 @@ export class Test {
         })
 
 
-        if (chosenOption && chosenOption.chosenAnswerId) { /*проверяем есть ли отвеченный вопрос, если уже есть. то кнопку не дизэйблим*/
+        if (chosenOption && chosenOption.chosenAnswerId) {
             this.nextButtonElement.removeAttribute('disabled');
             this.passButtonElement.classList.add('disabled');
             document.getElementById('img-arrow').setAttribute('src', '/images/grey-mini-arrow.svg');
@@ -140,7 +133,7 @@ export class Test {
         }
 
 
-        if (this.currentQuestionIndex === this.quiz.questions.length) {
+        if (this.currentQuestionIndex === this.test.questions.length) {
             this.nextButtonElement.innerText = 'Завершить';
         } else {
             this.nextButtonElement.innerText = 'Далее';
@@ -159,7 +152,7 @@ export class Test {
     }
 
     move(action) {
-        const activeQuestion = this.quiz.questions[this.currentQuestionIndex - 1];
+        const activeQuestion = this.test.questions[this.currentQuestionIndex - 1];
         const chosenAnswer = Array.from(document.getElementsByClassName('option-answer')).find(element => {
             return element.checked;
         });
@@ -187,7 +180,7 @@ export class Test {
             this.currentQuestionIndex--;
         }
 
-        if (this.currentQuestionIndex > this.quiz.questions.length) {
+        if (this.currentQuestionIndex > this.test.questions.length) {
             clearInterval(this.interval);
             this.complete();
             return;
@@ -213,23 +206,18 @@ export class Test {
         if (!userInfo) {
             location.href = '#/';
         }
-
         try {
             const result = await CustomHttp.request(config.host + '/tests/' + this.testId + '/pass', 'POST',
                 {
                     userId: userInfo.userId,
                     results: this.userResult
                 });
-
             if (result) {
                 if (result.error) {
                     throw new Error(result.error);
                 }
                  location.href = '#/result';
-                 sessionStorage.setItem('score', result.score);
-                 sessionStorage.setItem('total', result.total);
             }
-            sessionStorage.setItem('userResult', JSON.stringify(this.userResult));
         } catch (error) {
             console.log(error);
         }

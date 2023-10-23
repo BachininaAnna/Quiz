@@ -1,6 +1,6 @@
 import {CustomHttp} from "../services/custom-http.js";
 import config from "../../config/config.js";
-import {Auth} from "../services/auth";
+import {Auth} from "../services/auth.js";
 
 export class Choice {
 
@@ -33,7 +33,6 @@ export class Choice {
                         throw new Error(result.error);
                     }
                     this.testResult = result;
-
                 }
             } catch (error) {
                 return console.log(error);
@@ -85,9 +84,9 @@ export class Choice {
     }
 
     chooseQuiz(element) {
-       this.testId = element.getAttribute('test-id');
+        this.testId = element.getAttribute('test-id');
         if (this.testId) {
-            sessionStorage.setItem('testId', this.testId);/*????*/
+            sessionStorage.setItem('testId', this.testId);
             location.href = '#/test';
         }
     }

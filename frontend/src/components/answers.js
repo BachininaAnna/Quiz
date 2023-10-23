@@ -57,7 +57,7 @@ export class Answers {
 
             const answerTitleSpan = document.createElement('span');
             answerTitleSpan.innerText = 'Вопрос ' + (i + 1) + ': ';
-            answerTitle.appendChild(answerTitleSpan);/*+++*/
+            answerTitle.appendChild(answerTitleSpan);
 
             const answerTitleText = document.createElement('p');
             answerTitleText.innerText = completedQuestions[i].question;
