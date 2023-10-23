@@ -1,4 +1,3 @@
-import {UrlManager} from "../utilis/url-manager.js";
 import {CustomHttp} from "../services/custom-http.js";
 import config from "../../config/config.js";
 import {Auth} from "../services/auth";
@@ -8,10 +7,7 @@ export class Choice {
     constructor() {
         this.quizzes = [];
         this.testResult = null;
-
-        /*new UrlManager();*/
-        /* this.routeParams = UrlManager.getQueryParams();
-         UrlManager.checkUserData(this.routeParams);*/
+        this.testId = null;
         this.init();
     }
 
@@ -54,7 +50,7 @@ export class Choice {
                 const that = this;
                 const choiceOptionElement = document.createElement('div');
                 choiceOptionElement.className = 'choice-option';
-                choiceOptionElement.setAttribute('data-id', quiz.id);
+                choiceOptionElement.setAttribute('test-id', quiz.id);
                 choiceOptionElement.onclick = function () {
                     that.chooseQuiz(this);
                 }
@@ -89,9 +85,9 @@ export class Choice {
     }
 
     chooseQuiz(element) {
-        const id = element.getAttribute('data-id');
-        if (id) {
-            sessionStorage.setItem('id', id);
+       this.testId = element.getAttribute('test-id');
+        if (this.testId) {
+            sessionStorage.setItem('testId', this.testId);/*????*/
             location.href = '#/test';
         }
     }

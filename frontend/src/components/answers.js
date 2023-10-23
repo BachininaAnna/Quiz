@@ -1,55 +1,44 @@
+import {Auth} from "../services/auth.js";
+import {CustomHttp} from "../services/custom-http.js";
+import config from "../../config/config.js";
+
 export class Answers {
-
     constructor() {
-        this.quiz = null;
         this.correctAnswers = null;
-        this.id = null;
-        this.name = null;
-        this.lastName = null;
+        this.fullName = null;
         this.email = null;
+        this.testId = null;
         this.personInfo = null;
-        this.answersFromServer = [];
-        this.userResults = [];
+        this.test = null;
 
-        const url = new URL(location.href);
-        this.id = sessionStorage.getItem('id');
-        this.name = sessionStorage.getItem('name');
-        this.lastName = sessionStorage.getItem('lastName');
-        this.fullName = JSON.parse(localStorage.getItem('userInfo')).fullName;
+        this.fullName = Auth.getUserInfo().fullName;
         this.email = localStorage.getItem('email');
+        this.testId = sessionStorage.getItem('testId');
 
-        if (this.id) {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'https://testologia.site/get-quiz?id=' + this.id, false);
-            xhr.send();
-            if (xhr.status === 200 && xhr.responseText) {
-                try {
-                    this.quiz = JSON.parse(xhr.responseText);
-                } catch (e) {
-                    location.href = '#/';
-                }
-                this.getResult();
-            } else {
+        this.init();
+    }
+    async init() {
+        if (this.testId) {
+            const userInfo = Auth.getUserInfo();
+            if (!userInfo) {
                 location.href = '#/';
             }
-        } else {
-            location.href = '#/';
+            try {
+                const result = await CustomHttp.request(config.host + '/tests/' + this.testId + '/result/details?userId=' + userInfo.userId);
+                if (result) {
+                    if (result.error) {
+                        throw new Error(result.error);
+                    }
+                    this.test = result.test;
+                    this.showRightWrongAnswers();
+                }
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
-    getResult() {
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://testologia.site/get-quiz-right?id=' + this.id, false);
-        xhr.send();
-
-        if (xhr.status === 200 && xhr.responseText) {
-            this.answersFromServer = JSON.parse(xhr.response);
-            this.userResults = JSON.parse(sessionStorage.getItem('userResult'))
-            this.showRightWrongAnswers();
-        }
-    }
-
     showRightWrongAnswers() {
-        document.getElementById('answers-pre-title-span').innerText = this.quiz.name;
+        document.getElementById('answers-pre-title-span').innerText = this.test.name;
         this.correctAnswers = document.getElementById('correct-answers');
         this.correctAnswers.innerHTML = '';
 
@@ -57,10 +46,8 @@ export class Answers {
         this.personInfo.innerHTML = '';
         this.personInfo.innerText = `${this.fullName}, ${this.email}`;
 
-        const completedQuestions = this.quiz.questions;
-
+        const completedQuestions = this.test.questions;
         for (let i = 0; i < completedQuestions.length; i++) {
-            let isCorrectAnswer = false;
             const correctAnswer = document.createElement('div');
             correctAnswer.className = 'correct-answer';
 
@@ -70,20 +57,13 @@ export class Answers {
 
             const answerTitleSpan = document.createElement('span');
             answerTitleSpan.innerText = 'Вопрос ' + (i + 1) + ': ';
-            answerTitle.appendChild(answerTitleSpan);
+            answerTitle.appendChild(answerTitleSpan);/*+++*/
 
             const answerTitleText = document.createElement('p');
             answerTitleText.innerText = completedQuestions[i].question;
             answerTitle.appendChild(answerTitleText);
 
             correctAnswer.appendChild(answerTitle);
-
-            if (this.userResults[i] && this.answersFromServer[i] === this.userResults[i].chosenAnswerId) {
-                isCorrectAnswer = true;
-            } else {
-                isCorrectAnswer = false;
-            }
-
 
             completedQuestions[i].answers.forEach(answer => {
                 const answerOption = document.createElement('div');
@@ -98,22 +78,15 @@ export class Answers {
 
                 answerOption.appendChild(answerCircle);
                 answerOption.appendChild(answerText);
-
                 correctAnswer.appendChild(answerOption);
 
-                if (isCorrectAnswer) {
-                    if (answer.id === this.answersFromServer[i]) {
-                        answerCircle.classList.add('correct-circle');
-                        answerText.classList.add('correct-text');
-                    }
-                } else {
-                    if (this.userResults[i].chosenAnswerId && answer.id === this.userResults[i].chosenAnswerId) {
-                        answerCircle.classList.add('wrong-circle');
-                        answerText.classList.add('wrong-text');
-                    }
+                if (answer.correct === true) {
+                    answerCircle.classList.add('correct-circle');
+                    answerText.classList.add('correct-text');
+                } else if (answer.correct === false) {
+                    answerCircle.classList.add('wrong-circle');
+                    answerText.classList.add('wrong-text');
                 }
-
-
             })
             this.correctAnswers.appendChild(correctAnswer);
         }

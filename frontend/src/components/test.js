@@ -1,10 +1,9 @@
-import {UrlManager} from "../utilis/url-manager.js";
+import {UrlManager} from "../utilis/url-manager.js";/*???*/
 import {CustomHttp} from "../services/custom-http.js";
 import config from "../../config/config.js";
 import {Auth} from "../services/auth.js";
 
 export class Test {
-
     constructor() {
         this.progressBarElement = null;
         this.nextButtonElement = null;
@@ -14,17 +13,9 @@ export class Test {
         this.optionsElement = null;
         this.quiz = null;
         this.currentQuestionIndex = 1;
-        this.userResult = [];
+        this.userResult = [];/**/
         this.testId = null;
-        this.name = null;
-        this.lastName = null;
-        this.email = null;
-
-        new UrlManager();
-        this.testId = sessionStorage.getItem('id');
-        this.name = sessionStorage.getItem('name');
-        this.lastName = sessionStorage.getItem('lastName');
-        this.email = sessionStorage.getItem('email');
+        this.testId = sessionStorage.getItem('testId');
 
         this.init();
 
@@ -40,6 +31,7 @@ export class Test {
                     }
                     this.quiz = result;
                     this.startQuiz();
+                    console.log(result);
                 }
             } catch (error) {
                 console.log(error);
@@ -198,7 +190,7 @@ export class Test {
         if (this.currentQuestionIndex > this.quiz.questions.length) {
             clearInterval(this.interval);
             this.complete();
-            return
+            return;
         }
 
         Array.from(this.progressBarElement.children).forEach((item, index) => {

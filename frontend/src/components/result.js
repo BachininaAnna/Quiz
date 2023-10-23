@@ -4,9 +4,7 @@ import {Auth} from "../services/auth.js";
 
 export class Result  {
     constructor() {
-        /*document.getElementById('result-score').innerText = sessionStorage.getItem('score') +
-            '/' + sessionStorage.getItem('total');*/
-        this.testId = sessionStorage.getItem('id');
+        this.testId = sessionStorage.getItem('testId');
         this.init();
     }
     async init(){
@@ -28,7 +26,6 @@ export class Result  {
                 console.log(error);
             }
         }
-       /* location.href = '#/';*/
     }
 }
 
